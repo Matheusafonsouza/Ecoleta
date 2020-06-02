@@ -1,6 +1,7 @@
 //imports
 import path from 'path';
 
+//knexfile configuration
 module.exports = {
     client: 'sqlite3',
     connection: {
@@ -8,6 +9,9 @@ module.exports = {
     },
     migrations: {
         directory: path.resolve(__dirname, 'src', 'database', 'migrations'),
+    },
+    seeds: {
+        directory: path.resolve(__dirname, 'src', 'database', 'seeds'),
     },
     useNullAsDefault: true,
 }
