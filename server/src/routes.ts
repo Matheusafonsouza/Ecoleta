@@ -15,6 +15,9 @@ routes.get('/items', itemsController.index);
     //create a point
 routes.post('/points', pointsController.create);
 
+    //return all points
+routes.get('/points', pointsController.index);
+
     //return one point
 routes.get('/points/:id', pointsController.show);
 
