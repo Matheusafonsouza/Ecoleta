@@ -10,7 +10,12 @@ export default class PointsController {
         if (!point)
             return res.status(400).send({ error: 'Point not found.' });
 
-        return res.json(point);
+        const items = await knex('items')
+            .join('point_items', 'items.id', '=', 'point_items.item_id')
+            .where('point_items.point_id', id)
+            .select('items.title');
+
+        return res.json({ point, items });
     }
 
     async create(req: Request, res: Response) {
