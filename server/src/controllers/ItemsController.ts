@@ -1,7 +1,10 @@
+//imports
 import { Request, Response } from 'express';
 import knex from '../database/connection';
 
+//class for items methods
 export default class ItemsController {
+    //return all items
     async index (req: Request, res: Response) {
         const items = await knex('items').select('*');
     
@@ -12,7 +15,7 @@ export default class ItemsController {
                 image_url: `http://localhost:3333/uploads/${item.image}`,
             };
         });
-    
+
         return res.json(serializedItems);
     }
 }

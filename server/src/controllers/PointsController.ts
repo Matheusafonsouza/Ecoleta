@@ -1,7 +1,10 @@
+//imports
 import { Request, Response } from 'express';
 import knex from '../database/connection';
 
+//class for points methods
 export default class PointsController {
+    //return a point by id
     async show(req: Request, res: Response) {
         const { id } = req.params;
 
@@ -18,6 +21,7 @@ export default class PointsController {
         return res.json({ point, items });
     }
 
+    //create a point
     async create(req: Request, res: Response) {
         const { 
             name,
@@ -64,6 +68,7 @@ export default class PointsController {
         });
     }
 
+    //return a point by filtering it
     async index(req: Request, res: Response) {
         const { city, uf, items } = req.query;
 
