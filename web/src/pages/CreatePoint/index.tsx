@@ -3,11 +3,27 @@ import { Link } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi'
 import { Map, TileLayer, Marker } from 'react-leaflet';
 
+import api from '../../services/api';
+
 import './styles.css';
 
 import logo from '../../assets/logo.svg';
 
+interface Item {
+    id: number;
+    title: string;
+    image_url: string;
+}
+
 const CreatePoint = () => {
+    const [items, setItems] = React.useState<Item[]>([]);
+
+    React.useEffect(() => {
+        api.get('/items').then(res => {
+            setItems(res.data);
+        });
+    }, []);
+
     return (
         <div id="page-create-point">
             <header>
@@ -79,30 +95,12 @@ const CreatePoint = () => {
                     </legend>
 
                     <ul className="items-grid">
-                        <li>
-                            <img src="http://localhost:3333/uploads/oleo.svg" alt="teste"/>
-                            <span>Óleo de Cozinha</span>
-                        </li>
-                        <li>
-                            <img src="http://localhost:3333/uploads/oleo.svg" alt="teste"/>
-                            <span>Óleo de Cozinha</span>
-                        </li>
-                        <li>
-                            <img src="http://localhost:3333/uploads/oleo.svg" alt="teste"/>
-                            <span>Óleo de Cozinha</span>
-                        </li>
-                        <li>
-                            <img src="http://localhost:3333/uploads/oleo.svg" alt="teste"/>
-                            <span>Óleo de Cozinha</span>
-                        </li>
-                        <li>
-                            <img src="http://localhost:3333/uploads/oleo.svg" alt="teste"/>
-                            <span>Óleo de Cozinha</span>
-                        </li>
-                        <li>
-                            <img src="http://localhost:3333/uploads/oleo.svg" alt="teste"/>
-                            <span>Óleo de Cozinha</span>
-                        </li>
+                        {items.map(item => (
+                            <li key={item.id}>
+                                <img src={item.image_url} alt="teste"/>
+                                <span>{item.title}</span>
+                            </li>
+                        ))}
                     </ul>
                 </fieldset>
                 <button type="submit">Cadastrar ponto de coleta</button>
