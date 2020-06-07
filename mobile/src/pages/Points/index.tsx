@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, Alert} from 'react-native';
 import Constants from 'expo-constants';
 import { Feather as Icon} from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Map, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
 import * as Location from "expo-location";
@@ -22,12 +22,20 @@ interface Point {
   longitude: number;
 }
 
+interface Params {
+  uf: string;
+  city: string;
+}
+
 const Points = () => {
   const navigation = useNavigation();
   const [items, setItems] = React.useState<Item[]>([]);
   const [selectedItems, setSelectedItems] = React.useState<number[]>([]);
   const [initialPos, setInitialPos] = React.useState<[number, number]>([0,0]);
   const [points, setPoints] = React.useState<Point[]>([]);
+  const route = useRoute();
+
+  const routeParams = route.params as Params;
   
   React.useEffect(() => {
     api.get('/items').then((res => {
@@ -56,21 +64,21 @@ const Points = () => {
   React.useEffect(() => {
     api.get('/points', {
       params: {
-        city: 'Brasília',
-        uf: 'DF',
-        items: [6]
+        city: routeParams.city,
+        uf: routeParams.uf,
+        items: selectedItems
       }
     }).then(res => {
       setPoints(res.data);
     });
-  }, []);
+  }, [selectedItems]);
 
   function handleNavigateBack() {
       navigation.goBack();
   }
 
   function handleNavigateToDetail(id: number) {
-      navigation.navigate('Detail', { point_id: id })
+      navigation.navigate('Detail', { point_id: id})
   }
 
   function handleSelectItem(id: number) {
