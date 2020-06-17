@@ -1,17 +1,20 @@
+//imports
 import React, { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi'
+import { Link, useHistory } from 'react-router-dom';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import axios from 'axios';
 import { LeafletMouseEvent } from 'leaflet';
-import api from '../../services/api';
-
-import Dropzone from '../../components/Dropzone';
 
 import './styles.css';
 
 import logo from '../../assets/logo.svg';
+import { FiArrowLeft } from 'react-icons/fi'
 
+import Dropzone from '../../components/Dropzone';
+import api from '../../services/api';
+import AlertMessage from '../../components/AlertMessage';
+
+//typescript interfaces
 interface Item {
     id: number;
     title: string;
@@ -26,25 +29,29 @@ interface IBGECityResponse {
     nome: string;
 }
 
+//component
 const CreatePoint = () => {
+    //configuration
+    const history = useHistory();
+
+    //states
     const [items, setItems] = React.useState<Item[]>([]);
     const [ufs, setUfs] = React.useState<string[]>([]);
     const [cities, setCities] = React.useState<string[]>([]);
-
     const [initialPos, setInitialPos] = React.useState<[number, number]>([0,0]);
-
     const [formData, setFormData] = React.useState({
         name: '',
         email: '',
         whatsapp: '',
     });
-
     const [selectedUf, setSelectedUf] = React.useState('0');
     const [selectedCity, setSelectedCity] = React.useState('0');
     const [selectedItems, setSelectedItems] = React.useState<number[]>([]);
     const [selectedPos, setSelectPos] = React.useState<[number, number]>([0,0]);
     const [selectedFile, setSelectedFile] = React.useState<File>();
+    const [created, setCreated] = React.useState(false);
 
+    //effects
     React.useEffect(() => {
         api.get('/items').then(res => {
             setItems(res.data);
@@ -75,6 +82,7 @@ const CreatePoint = () => {
         });
     }, []);
 
+    //functions
     function handleSelectUf(event: React.ChangeEvent<HTMLSelectElement>) {
         setSelectedUf(event.target.value);
     }
@@ -134,9 +142,13 @@ const CreatePoint = () => {
 
         await api.post('/points', data);
 
-        alert("criado!");
+        setCreated(true);
+
+        setTimeout(() => { history.push('/'); }, 3000);
+        
     }
 
+    //render component
     return (
         <div id="page-create-point">
             <header>
@@ -226,6 +238,8 @@ const CreatePoint = () => {
                 </fieldset>
                 <button type="submit">Cadastrar ponto de coleta</button>
             </form>
+
+            <AlertMessage status={created} />
         </div>
     );
 };

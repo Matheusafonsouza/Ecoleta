@@ -1,13 +1,17 @@
+//imports
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, Alert} from 'react-native';
 import Constants from 'expo-constants';
-import { Feather as Icon} from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Map, { Marker } from 'react-native-maps';
-import { SvgUri } from 'react-native-svg';
 import * as Location from "expo-location";
+
+import { Feather as Icon} from '@expo/vector-icons';
+import { SvgUri } from 'react-native-svg';
+
 import api from '../../services/api';
 
+//typescript interfaces
 interface Item {
   id: number;
   title: string;
@@ -28,16 +32,20 @@ interface Params {
   city: string;
 }
 
+//component
 const Points = () => {
+  //configuration
   const navigation = useNavigation();
+  const route = useRoute();
+  const routeParams = route.params as Params;
+
+  //states
   const [items, setItems] = React.useState<Item[]>([]);
   const [selectedItems, setSelectedItems] = React.useState<number[]>([]);
   const [initialPos, setInitialPos] = React.useState<[number, number]>([0,0]);
   const [points, setPoints] = React.useState<Point[]>([]);
-  const route = useRoute();
 
-  const routeParams = route.params as Params;
-  
+  //effects
   React.useEffect(() => {
     api.get('/items').then((res => {
       setItems(res.data);
@@ -74,6 +82,7 @@ const Points = () => {
     });
   }, [selectedItems]);
 
+  //functions
   function handleNavigateBack() {
       navigation.goBack();
   }
@@ -92,6 +101,7 @@ const Points = () => {
     }
   } 
 
+  //render component
   return (
     <>
       <View style={styles.container}>
@@ -139,6 +149,7 @@ const Points = () => {
   );
 };
 
+//style configuration
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,7 +1,9 @@
+//imports
 import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
 
+//multer storage configuration
 export default {
     storage: multer.diskStorage({
         destination: path.resolve(__dirname, '..', '..', 'uploads'),

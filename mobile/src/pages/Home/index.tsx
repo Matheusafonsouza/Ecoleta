@@ -1,18 +1,26 @@
+//imports
 import React from 'react';
-import { Feather as Icon } from '@expo/vector-icons'
 import { View, ImageBackground, Image, StyleSheet, Text, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
+import { Feather as Icon } from '@expo/vector-icons'
+
+//component
 const Home = () => {
+  //configuration
   const navigation = useNavigation();
+
+  //states
   const [uf , setUf] = React.useState('');
   const [city , setCity] = React.useState('');
 
+  //functions
   function handleNavigateToPoints() {
     navigation.navigate('Points', { uf, city })
   }
 
+  //render component
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ImageBackground source={require('../../assets/home-background.png')} style={styles.container} imageStyle={{width: 274, height: 368}}>
@@ -30,7 +38,7 @@ const Home = () => {
 
               <RectButton style={styles.button} onPress={handleNavigateToPoints}>
                   <View style={styles.buttonIcon}>
-                      <Icon name="arrow-right" color="#fff" size={24}/>
+                    <Icon name="arrow-right" color="#fff" size={24}/>
                   </View>
                   <Text style={styles.buttonText}>Entrar</Text>
               </RectButton>
@@ -40,6 +48,7 @@ const Home = () => {
   );
 };
 
+//style configuration
 const styles = StyleSheet.create({
   container: {
     flex: 1,

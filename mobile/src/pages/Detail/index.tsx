@@ -1,12 +1,16 @@
+//imports
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text, Linking } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Feather as Icon, FontAwesome} from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
-import api from '../../services/api';
 import * as MailComposer from 'expo-mail-composer';
 
+import { Feather as Icon, FontAwesome} from '@expo/vector-icons';
+
+import api from '../../services/api';
+
+//typescript interfaces
 interface Params {
     point_id: number;
 };
@@ -26,18 +30,24 @@ interface Data {
     }[];
 }
 
+//component
 const Detail = () => {
+    //configuration
     const navigation = useNavigation();
     const route = useRoute();
     const routeParams = route.params as Params;
+
+    //states
     const [data, setData] = React.useState<Data>({} as Data);
 
+    //effects
     React.useEffect(() => {
         api.get(`/points/${routeParams.point_id}`).then(res => {
             setData(res.data);
         });
     }, []);
 
+    //functions
     function handleNavigateBack() {
         navigation.goBack();
     };
@@ -57,6 +67,7 @@ const Detail = () => {
         return null;
     };
 
+    //render component
     return (
         <>
             <View style={styles.container}>
@@ -89,6 +100,7 @@ const Detail = () => {
     );
 };
 
+//style configuration
 const styles = StyleSheet.create({
     container: {
         flex: 1,
